@@ -11,5 +11,8 @@
     "url": "https://github.com/Pedro-arevalo/"
   },
   "author": "Pedro Arevalo",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
 }
