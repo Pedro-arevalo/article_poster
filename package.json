@@ -1,0 +1,15 @@
+{
+  "name": "my-blog",
+  "version": "1.0.0",
+  "description": "my own blog, where i can post my own articles.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Pedro-arevalo/"
+  },
+  "author": "Pedro Arevalo",
+  "license": "ISC"
+}
