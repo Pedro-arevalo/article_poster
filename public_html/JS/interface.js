@@ -12,17 +12,13 @@ function showEmpty() {
 }
 function createTableRow(art) {
     let table = document.getElementById('table_allPosts');
-    let tr = document.createElement('tr');
-    let td = document.createElement('td');
-    td.innerHTML = art.title;
-    td.classList.add('data_tableRow');
-    tr.appendChild(td);
-    table.appendChild(tr);
+    let table_body = document.getElementById('tableBody_allPosts');
+    let table_rows = `<tr><td>${art.title}</td></tr>`;
+    table_body.innerHTML += table_rows;
     table.classList.remove('hiddenElements');
 }
 
 function showAllArticles(arts) {
-    // arts.splice(0, 1);
     if (arts.length == 0) {
         showEmpty();
     } else {

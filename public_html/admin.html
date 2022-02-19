@@ -12,7 +12,7 @@
         }
         .box_lastPosts {
             margin: 0 auto;
-            width: 70%;
+            width: 80%;
         }
         .card-body {
             min-height: 200px;
@@ -26,10 +26,12 @@
     </style>
 </head>
 <body>
+    <header class="bg-dark p-4">
+        <div class="container">
+            <h1 class="text-light">Área do Administrador</h1>
+        </div> 
+    </header>
     <div class="container">
-        <header class="bg-warning p-4">
-            <h1 class="text-white">Área do Administrador</h1>
-        </header>
         <div id="box_lastPosts" class="box_lastPosts mt-5">
             <h2 class="display-3 text-dark">Últimos Posts</h3>
             <div class="card mt-2">
@@ -42,7 +44,9 @@
                     </div>
                 </div>
                 <div id="box_lastPosts-body" class="card-body" style="padding: 0">
-                    <table id="table_allPosts" class="table hiddenElements"></table>
+                    <table id="table_allPosts" class="table table-striped hiddenElements">
+                        <tbody id="tableBody_allPosts"></tbody>
+                    </table>
                 </div>
                     <!-- <h3 class="text-muted">Sem artigos postados no momento.</h3> -->
             </div>

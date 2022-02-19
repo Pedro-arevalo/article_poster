@@ -16,12 +16,25 @@ const ARTICLES = [
         text: 'Hi how are you?',
         time: 'Here shows the time the article was posted',
     },
+    {
+        title: 'My third Post',
+        text: 'Hi how are you?',
+        time: 'Here shows the time the article was posted',
+    },
+    {
+        title: 'My fourth Post',
+        text: 'Hi how are you?',
+        time: 'Here shows the time the article was posted',
+    },
 ];
 
 app.use(express.static(path.join(__dirname, 'public_html')));
 
 app.get('/api/all', (req, res) => {
     res.send(JSON.stringify(ARTICLES));
+});
+app.post('/api/new', (req, res) => {
+    res.send('Artigo publicado com sucesso.');
 });
 
 app.listen(PORT, (error) => {
