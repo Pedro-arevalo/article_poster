@@ -10,9 +10,8 @@ router.get('/all', (req, res) => {
 });
 
 router.post('/new', (req, res) => {
+    console.log(`====== NEW ${req.method} REQUEST ======`);
     console.log(req.headers);
-    console.log('=======================================');
-    console.log(req.method);
     console.log('=======================================');
     console.log(req.body);
     let incomingReq = req.body;

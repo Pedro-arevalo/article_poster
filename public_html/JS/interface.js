@@ -1,3 +1,27 @@
+function showAllArticles(arts) {
+    if (arts.length == 0) {
+        showEmpty();
+    } else {
+        let table = document.getElementById('table_allPosts');
+        let table_body = document.getElementById('tableBody_allPosts');
+        let artsInHtml = '';
+        arts.forEach((art) => {
+            artsInHtml += createTableRow(art);
+        });
+        table_body.innerHTML = artsInHtml;
+        table.classList.remove('hiddenElements');
+    }
+}
+
+function createTableRow(art) {
+    // let table = document.getElementById('table_allPosts');
+    // let table_body = document.getElementById('tableBody_allPosts');
+    let table_rows = `<tr><td>${art.title}</td></tr>`;
+    return table_rows;
+    // table_body.innerHTML += table_rows;
+    // table.classList.remove('hiddenElements');
+}
+
 function showEmpty() {
     let card = document.getElementById('box_lastPosts-body');
     card.classList.add(
@@ -10,23 +34,7 @@ function showEmpty() {
     message.innerText = 'Sem artigos postados no momento.';
     card.appendChild(message);
 }
-function createTableRow(art) {
-    let table = document.getElementById('table_allPosts');
-    let table_body = document.getElementById('tableBody_allPosts');
-    let table_rows = `<tr><td>${art.title}</td></tr>`;
-    table_body.innerHTML += table_rows;
-    table.classList.remove('hiddenElements');
-}
 
-function showAllArticles(arts) {
-    if (arts.length == 0) {
-        showEmpty();
-    } else {
-        arts.forEach((art) => {
-            createTableRow(art);
-        });
-    }
-}
 function setCounter(info) {
     let counter = document.getElementById('data_postCounter');
     let STRING_POST;

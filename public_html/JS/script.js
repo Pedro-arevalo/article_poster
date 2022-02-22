@@ -28,18 +28,30 @@ function getAllArticles() {
 }
 
 function postNewArticle() {
+    let titleInput = document.getElementById('inputPost_title').value;
+    let textInput = document.getElementById('inputPost_text').value;
     let newPost = {
-        title: document.getElementById('inputPost_title').value,
-        text: document.getElementById('inputPost_text').value,
+        title: titleInput,
+        text: textInput,
     };
     let options = {
         method: 'POST',
-        headers: new Headers({
-            'Content-Type': 'application/json',
-        }),
+        headers: new Headers({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(newPost),
     };
-    fetch('http://localhost:5000/api/new', options).then((res) => {
-        console.log(res);
-    });
+    fetch(URL_POST, options)
+        .then((res) => {
+            if (res.ok) {
+                console.log(res);
+                getAllArticles();
+            } else {
+                throw new Error('Something went wrong');
+            }
+
+            document.getElementById('inputPost_title').value = '';
+            document.getElementById('inputPost_text').value = '';
+        })
+        .catch((error) => {
+            console.log(error.message);
+        });
 }
