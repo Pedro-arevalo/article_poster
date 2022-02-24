@@ -1,0 +1,22 @@
+.hiddenElements {
+    display: none;
+}
+
+.box_lastPosts {
+    margin: 0 auto;
+    width: 80%;
+}
+
+.box_lastPosts-body {
+    padding: 0;
+    margin-bottom: -17px; /*removing the extra spacing at the bottom of the bootstrap card*/
+}
+td {
+    line-height: 2;
+    font-weight: bold;
+}
+
+/* MODAL / FORM*/
+#inputPost_text {
+    text-indent: 1em;
+}

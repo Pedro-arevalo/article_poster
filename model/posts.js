@@ -6,21 +6,25 @@ const mySystem = {
             title: 'Hello World',
             text: 'This is my first article post',
             time: 'Here shows the time the article was posted',
+            id: 0,
         },
         {
-            title: 'My second Post',
+            title: 'I am right here',
             text: 'Hi how are you?',
             time: 'Here shows the time the article was posted',
+            id: 1,
         },
         {
-            title: 'My third Post',
+            title: 'Look at me!',
             text: 'Hi how are you?',
             time: 'Here shows the time the article was posted',
+            id: 2,
         },
         {
-            title: 'My fourth Post',
+            title: 'Do you know me?',
             text: 'Hi how are you?',
             time: 'Here shows the time the article was posted',
+            id: 3,
         },
     ],
     showAllPosts() {
@@ -28,6 +32,22 @@ const mySystem = {
     },
     addNewPost(newPost) {
         this.posts.push(newPost);
+    },
+    updateExistingPost(newUpdate, postId) {
+        this.posts.forEach((post) => {
+            if (post.id == postId) {
+                post.title = newUpdate.title;
+                post.text = newUpdate.text;
+            }
+        });
+    },
+    deleteExistingPost(postId) {
+        this.posts.forEach((post) => {
+            if (post.id == postId) {
+                let i = this.posts.indexOf(post);
+                this.posts.splice(i, 1);
+            }
+        });
     },
 };
 
