@@ -86,7 +86,6 @@ function editExistingArticle() {
     fetch(URL_PUT, options)
         .then((res) => {
             if (res.ok) {
-                console.log(res);
                 getAllArticles();
             } else {
                 throw new Error('Something went wrong');

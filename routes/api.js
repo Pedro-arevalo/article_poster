@@ -5,28 +5,28 @@ const router = express.Router();
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
 
-router.get('/all', (req, res) => {
+function showServerActivity(req, res, next) {
+    console.log(`====== NEW ${req.method} REQUEST ======`);
+    console.log(req.headers);
+    console.log('=======================================');
+    console.log(req.body);
+    next();
+}
+
+router.get('/all', (req, res, next) => {
+    showServerActivity(req, res, next);
     res.json(mySystem.showAllPosts());
 });
 
-router.post('/new', (req, res) => {
-    console.log(`====== NEW ${req.method} REQUEST ======`);
-    console.log(req.headers);
-    console.log('=======================================');
-    console.log(req.body);
+router.post('/new', (req, res, next) => {
+    showServerActivity(req, res, next);
     let newPost = req.body;
-    mySystem.addNewPost({
-        title: newPost.title,
-        text: newPost.text,
-    });
+    mySystem.addNewPost(newPost);
     res.send('Article successfully posted.');
 });
 
-router.put('/update', (req, res) => {
-    console.log(`====== NEW ${req.method} REQUEST ======`);
-    console.log(req.headers);
-    console.log('=======================================');
-    console.log(req.body);
+router.put('/update', (req, res, next) => {
+    showServerActivity(req, res, next);
     /* INCOMING REQUISITION:
         
     {
@@ -46,12 +46,8 @@ router.put('/update', (req, res) => {
     res.send('Article successfully edited.');
 });
 
-router.delete('/del', (req, res) => {
-    console.log(`====== NEW ${req.method} REQUEST ======`);
-    console.log(req.headers);
-    console.log('=======================================');
-    console.log(req.body);
-
+router.delete('/del', (req, res, next) => {
+    showServerActivity(req, res, next);
     //There's code remaining, it is like this because of testing.
     let postId = 1;
     mySystem.deleteExistingPost(postId);

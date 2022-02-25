@@ -1,43 +1,49 @@
 const mySystem = {
     posts: [
-        //the articles that i manually put here, for testing purposes,
-        //must be a string in JSON
         {
+            id: 'm3LpVa3LGn1nfTWKJvnSiv38w',
             title: 'Hello World',
             text: 'This is my first article post',
-            time: 'Here shows the time the article was posted',
-            id: 0,
+            date: new Date(new Date().valueOf() - 1000 * 60 * 60 * 24 * 5),
         },
         {
+            id: '5TT8onqqt8rbxBUjl2G3r1qbg',
             title: 'I am right here',
             text: 'Hi how are you?',
-            time: 'Here shows the time the article was posted',
-            id: 1,
+            date: new Date(new Date().valueOf() - 1000 * 60 * 60 * 24 * 2),
         },
         {
+            id: 'uRKsaNkg3ISzSRldhZRd9XrPF',
             title: 'Look at me!',
             text: 'Hi how are you?',
-            time: 'Here shows the time the article was posted',
-            id: 2,
+            date: new Date(new Date().valueOf() - 1000 * 60 * 60 * 24),
         },
         {
+            id: 'Cvnq67Tse0ogw94zbtvMjFhVs',
             title: 'Do you know me?',
             text: 'Hi how are you?',
-            time: 'Here shows the time the article was posted',
-            id: 3,
+            date: new Date(),
         },
     ],
     showAllPosts() {
         return this.posts;
     },
     addNewPost(newPost) {
-        this.posts.push(newPost);
+        let dateOfPost = new Date();
+        this.posts.push({
+            id: generateId(),
+            title: newPost.title,
+            text: newPost.text,
+            date: dateOfPost,
+        });
     },
     updateExistingPost(newUpdate, postId) {
+        let dateOfEditing = new Date();
         this.posts.forEach((post) => {
             if (post.id == postId) {
                 post.title = newUpdate.title;
                 post.text = newUpdate.text;
+                post.date_lastEdit = dateOfEditing;
             }
         });
     },
@@ -50,5 +56,17 @@ const mySystem = {
         });
     },
 };
+
+function generateId() {
+    let result = '';
+    let characters =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < 25; i++) {
+        result += characters.charAt(
+            Math.floor(Math.random() * characters.length)
+        );
+    }
+    return result;
+}
 
 module.exports = mySystem;

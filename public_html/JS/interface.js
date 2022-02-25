@@ -14,12 +14,46 @@ function showAllArticles(arts) {
 }
 
 function createTableRow(art) {
+    let raw_postDate = new Date(art.date);
+    let postDate = raw_postDate.toLocaleString();
     // let table = document.getElementById('table_allPosts');
     // let table_body = document.getElementById('tableBody_allPosts');
-    let table_rows = `<tr><td>${art.title}</td></tr>`;
+    let table_rows = `
+        <tr>
+            <td>${art.title}</td>
+            <td>${showProperDateFormat(art.date)}</td>
+        </tr>
+    `;
     return table_rows;
     // table_body.innerHTML += table_rows;
     // table.classList.remove('hiddenElements');
+}
+
+function showProperDateFormat(date) {
+    let postDate = new Date(date);
+    let today = new Date();
+    let yesterday = new Date(new Date().valueOf() - 1000 * 60 * 60 * 24);
+    let fdate_postDate = postDate.toDateString();
+    let fdate_today = today.toDateString();
+    let fdate_yesterday = yesterday.toDateString();
+
+    console.log(fdate_yesterday);
+    let hours = postDate.getHours();
+    let minutes = postDate.getMinutes();
+    if (minutes < 10) {
+        minutes = '0' + minutes;
+    }
+    let hour_and_minutes = `${hours}:${minutes}`;
+
+    let result = '';
+    if (fdate_postDate === fdate_today) {
+        result = `Hoje às ${hour_and_minutes}`;
+    } else if (fdate_postDate === fdate_yesterday) {
+        result = `Ontem às ${hour_and_minutes}`;
+    } else {
+        result = `${postDate.toLocaleDateString()} às ${hour_and_minutes}`;
+    }
+    return result;
 }
 
 function showEmpty() {

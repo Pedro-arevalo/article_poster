@@ -11,9 +11,13 @@
     padding: 0;
     margin-bottom: -17px; /*removing the extra spacing at the bottom of the bootstrap card*/
 }
+
+td:first-of-type {
+    font-weight: bold;
+}
+
 td {
     line-height: 2;
-    font-weight: bold;
 }
 
 /* MODAL / FORM*/

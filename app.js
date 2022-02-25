@@ -6,11 +6,11 @@ const app = express();
 
 app.use('/api', routes_api);
 app.use(express.static(path.join(__dirname, 'public_html')));
-
 app.listen(PORT, (error) => {
     if (error) {
         console.log(error);
     } else {
+        console.log(new Date().getHours());
         console.log(`Server successfully running on port ${PORT}`);
     }
 });
