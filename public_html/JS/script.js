@@ -3,24 +3,6 @@ const URL_GET = 'http://localhost:5000/api/all';
 const URL_PUT = 'http://localhost:5000/api/update';
 const URL_DELETE = 'http://localhost:5000/api/del';
 
-document.addEventListener('DOMContentLoaded', () => {
-    const button_postArticle = document.getElementById('button_post');
-    //button_editArticle only for testing purposes for now.
-    const button_editArticle = document.getElementById('button_edit');
-    //button_deleteArticle only for testing purposes for now.
-    const button_deleteArticle = document.getElementById('button_delete');
-    button_postArticle.addEventListener('click', () => {
-        postNewArticle();
-    });
-    button_editArticle.addEventListener('click', () => {
-        editExistingArticle();
-    });
-    button_deleteArticle.addEventListener('click', () => {
-        deleteExistingArticle();
-    });
-    getAllArticles();
-});
-
 function getAllArticles() {
     fetch(URL_GET)
         .then((res) => {
@@ -96,9 +78,11 @@ function editExistingArticle() {
         });
 }
 
-function deleteExistingArticle() {
+function deleteExistingArticle(articleId) {
     let options = {
         method: 'DELETE',
+        headers: new Headers({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify({ id: articleId }),
     };
     fetch(URL_DELETE, options)
         .then((res) => {

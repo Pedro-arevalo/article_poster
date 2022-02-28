@@ -1,3 +1,14 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const button_postArticle = document.getElementById('button_post');
+    const button_delete = document.getElementById('button_delete');
+    button_postArticle.addEventListener('click', () => {
+        postNewArticle();
+    });
+
+    getAllArticles();
+});
+//this function contains all the
+//other ones interface related
 function showAllArticles(arts) {
     if (arts.length == 0) {
         showEmpty();
@@ -10,24 +21,70 @@ function showAllArticles(arts) {
         });
         table_body.innerHTML = artsInHtml;
         table.classList.remove('hiddenElements');
+        setTheEventsForEachRow();
     }
 }
 
 function createTableRow(art) {
-    let raw_postDate = new Date(art.date);
-    let postDate = raw_postDate.toLocaleString();
-    // let table = document.getElementById('table_allPosts');
-    // let table_body = document.getElementById('tableBody_allPosts');
     let table_rows = `
-        <tr>
+        <tr id="${art.id}">
             <td>${art.title}</td>
             <td>${showProperDateFormat(art.date)}</td>
         </tr>
     `;
     return table_rows;
-    // table_body.innerHTML += table_rows;
-    // table.classList.remove('hiddenElements');
 }
+
+function unselectRow(row, currentRow) {
+    if (row == currentRow) {
+        window.addEventListener('click', () => {});
+    }
+}
+
+function setTheEventsForEachRow() {
+    let allRows = document.querySelectorAll('tbody tr');
+    let rowId = '';
+    let articlesArea = document.querySelector('tbody');
+
+    window.addEventListener('click', (e) => {
+        let clickArea = e.target.parentNode.parentNode;
+        if (clickArea != articlesArea) {
+            let otherRow = document.querySelector('.row_selected');
+            if (otherRow) {
+                otherRow.classList.remove('row_selected');
+                button_delete.classList.add('disabled');
+                rowId = '';
+            }
+        }
+    });
+    allRows.forEach((row) => {
+        row.addEventListener('click', (event) => {
+            let clickedRow = event.target.parentNode;
+            let otherRow = document.querySelector('.row_selected');
+            if (otherRow) {
+                otherRow.classList.remove('row_selected');
+            }
+
+            clickedRow.classList.add('row_selected');
+            button_delete.classList.remove('disabled');
+            rowId = clickedRow.id;
+        });
+    });
+
+    button_delete.addEventListener('click', () => {
+        if (rowId == '') {
+            console.log('Please, select one article first.');
+        } else {
+            deleteExistingArticle(rowId);
+        }
+    });
+}
+
+//     window.addEventListener('click', (e) => {
+//         let area = e.target.parentNode;
+//         console.log(area);
+//     });
+// }
 
 function showProperDateFormat(date) {
     let postDate = new Date(date);
@@ -37,7 +94,6 @@ function showProperDateFormat(date) {
     let fdate_today = today.toDateString();
     let fdate_yesterday = yesterday.toDateString();
 
-    console.log(fdate_yesterday);
     let hours = postDate.getHours();
     let minutes = postDate.getMinutes();
     if (minutes < 10) {
@@ -61,7 +117,8 @@ function showEmpty() {
     card.classList.add(
         'd-flex',
         'justify-content-center',
-        'align-items-center'
+        'align-items-center',
+        'min-height'
     );
     let message = document.createElement('h3');
     message.classList.add('text-muted');

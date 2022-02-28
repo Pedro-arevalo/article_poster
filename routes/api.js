@@ -49,7 +49,7 @@ router.put('/update', (req, res, next) => {
 router.delete('/del', (req, res, next) => {
     showServerActivity(req, res, next);
     //There's code remaining, it is like this because of testing.
-    let postId = 1;
+    postId = req.body.id;
     mySystem.deleteExistingPost(postId);
     res.send('Article permanently deleted.');
 });

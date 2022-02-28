@@ -12,6 +12,14 @@
     margin-bottom: -17px; /*removing the extra spacing at the bottom of the bootstrap card*/
 }
 
+.min-height {
+    min-height: 200px;
+}
+
+.row_selected {
+    background-color: #cecece;
+}
+
 td:first-of-type {
     font-weight: bold;
 }

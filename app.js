@@ -10,7 +10,6 @@ app.listen(PORT, (error) => {
     if (error) {
         console.log(error);
     } else {
-        console.log(new Date().getHours());
         console.log(`Server successfully running on port ${PORT}`);
     }
 });
