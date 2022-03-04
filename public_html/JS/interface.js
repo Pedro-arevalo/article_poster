@@ -2,24 +2,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const button_postArticle = document.getElementById('button_post');
     const button_delete = document.getElementById('button_delete');
     const button_edit = document.getElementById('button_edit');
-    let occupated_before = false;
     button_postArticle.addEventListener('click', () => {
         postNewArticle();
     });
     getAllArticles();
 });
+let indexNum = 0;
+let first_time = true;
 //this function contains all the
 //other ones interface related
 let last_time_empty = false;
 function showAllArticles(arts) {
-    let table = document.getElementById('table_allPosts');
-    let table_body = document.getElementById('tableBody_allPosts');
-    let box = document.getElementById('box_lastPosts-body');
+    const table = document.getElementById('table_allPosts');
+    const table_body = document.getElementById('tableBody_allPosts');
+    const box = document.getElementById('box_lastPosts-body');
     const counter = document.getElementById('data_postCounter');
     let noPosts_title = document.querySelector('#box_lastPosts-body h3');
     let string_post = setCounter(arts.length); //return 'post' or 'posts' string
-    counter.innerText = `${arts.length} ${string_post}`;
     table_body.innerHTML = '';
+    counter.innerText = `${arts.length} ${string_post}`;
 
     if (arts.length == 0) {
         //DOES NOT HAS ARTICLES
@@ -47,8 +48,6 @@ function showAllArticles(arts) {
         //HAS ARTICLES
         //SET ENVIRONMENT
         let message = document.querySelector('#box_lastPosts-body h3');
-        console.log(message);
-        console.log('new', noPosts_title);
         if (message) {
             box.removeChild(message);
         }
@@ -85,10 +84,13 @@ function createTableRow(art) {
 }
 
 function setTheEventsForEachRow() {
+    // THIS CODE IS BEING READ A LOT THROUGH REGULAR USE
     let allRows = document.querySelectorAll('tbody tr');
     let lastRowId = null;
     let articlesArea = document.querySelector('tbody');
 
+    indexNum++;
+    console.log('this code is been read a total of :' + indexNum + ' times.');
     window.addEventListener('click', (e) => {
         //UNSELECT SELECTED TR (ARTICLES)
         let clickArea = e.target.parentNode.parentNode;
@@ -118,20 +120,22 @@ function setTheEventsForEachRow() {
             rowId = clickedRow.id;
         });
     });
+    if (first_time) {
+        button_delete.addEventListener('click', () => {
+            if (rowId == null) {
+                console.log('Please, select one article first.');
+            } else {
+                deleteExistingArticle(rowId);
+            }
+        });
 
-    button_delete.addEventListener('click', () => {
-        if (rowId == null) {
-            console.log('Please, select one article first.');
-        } else {
-            deleteExistingArticle(rowId);
-        }
-    });
-
-    button_edit.addEventListener('click', () => {
-        if (rowId == null) {
-            console.log('Please, select one article first');
-        } else {
-            editExistingArticle(rowId);
-        }
-    });
+        button_edit.addEventListener('click', () => {
+            if (rowId == null) {
+                console.log('Please, select one article first');
+            } else {
+                editExistingArticle(rowId);
+            }
+        });
+        first_time = false;
+    }
 }
