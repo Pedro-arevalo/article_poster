@@ -14,7 +14,6 @@ function getAllArticles() {
         })
         .then((articles) => {
             showAllArticles(articles);
-            setCounter(articles.length);
         })
         .catch((error) => {
             console.log(error.message);
@@ -36,7 +35,6 @@ function postNewArticle() {
     fetch(URL_POST, options)
         .then((res) => {
             if (res.ok) {
-                console.log(res);
                 getAllArticles();
             } else {
                 throw new Error('Something went wrong');
@@ -50,9 +48,9 @@ function postNewArticle() {
         });
 }
 
-function editExistingArticle() {
+function editExistingArticle(postId) {
     let newPostEdit = {
-        id: 2,
+        id: postId,
         changes: {
             title: 'The truth about her is that...',
             text: 'My new edited text',
@@ -87,7 +85,6 @@ function deleteExistingArticle(articleId) {
     fetch(URL_DELETE, options)
         .then((res) => {
             if (res.ok) {
-                console.log(res);
                 getAllArticles();
             } else {
                 throw new Error('Something went wrong');
