@@ -2,6 +2,12 @@ function createEl(el) {
     let newElement = document.createElement(el);
     return newElement;
 }
+
+function getById(id) {
+    let selectedElement = document.getElementById(id);
+    return selectedElement;
+}
+
 function formatDate(date) {
     let postDate = new Date(date);
     let today = new Date();

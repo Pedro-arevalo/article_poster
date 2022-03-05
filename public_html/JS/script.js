@@ -3,7 +3,7 @@ const URL_GET = 'http://localhost:5000/api/all';
 const URL_PUT = 'http://localhost:5000/api/update';
 const URL_DELETE = 'http://localhost:5000/api/del';
 
-function getAllArticles() {
+function getAllArticles(html) {
     fetch(URL_GET)
         .then((res) => {
             if (res.ok) {
@@ -13,14 +13,14 @@ function getAllArticles() {
             }
         })
         .then((articles) => {
-            showAllArticles(articles);
+            showAllArticles(articles, html);
         })
         .catch((error) => {
-            console.log(error.message);
+            console.log(error);
         });
 }
 
-function postNewArticle() {
+function postNewArticle(html) {
     let titleInput = document.getElementById('inputPost_title').value;
     let textInput = document.getElementById('inputPost_text').value;
     let newPost = {
@@ -35,7 +35,7 @@ function postNewArticle() {
     fetch(URL_POST, options)
         .then((res) => {
             if (res.ok) {
-                getAllArticles();
+                getAllArticles(html);
             } else {
                 throw new Error('Something went wrong');
             }
@@ -48,7 +48,7 @@ function postNewArticle() {
         });
 }
 
-function editExistingArticle(postId) {
+function editArticle(postId, html) {
     let newPostEdit = {
         id: postId,
         changes: {
@@ -66,7 +66,7 @@ function editExistingArticle(postId) {
     fetch(URL_PUT, options)
         .then((res) => {
             if (res.ok) {
-                getAllArticles();
+                getAllArticles(html);
             } else {
                 throw new Error('Something went wrong');
             }
@@ -76,7 +76,7 @@ function editExistingArticle(postId) {
         });
 }
 
-function deleteExistingArticle(articleId) {
+function deleteArticle(articleId, html) {
     let options = {
         method: 'DELETE',
         headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -85,7 +85,7 @@ function deleteExistingArticle(articleId) {
     fetch(URL_DELETE, options)
         .then((res) => {
             if (res.ok) {
-                getAllArticles();
+                getAllArticles(html);
             } else {
                 throw new Error('Something went wrong');
             }
