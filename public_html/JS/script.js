@@ -20,13 +20,8 @@ function getAllArticles(html) {
         });
 }
 
-function postNewArticle(html) {
-    let titleInput = document.getElementById('inputPost_title').value;
-    let textInput = document.getElementById('inputPost_text').value;
-    let newPost = {
-        title: titleInput,
-        text: textInput,
-    };
+function postNewArticle(interface_els_obj, title, text) {
+    let newPost = { title, text };
     let options = {
         method: 'POST',
         headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -35,25 +30,22 @@ function postNewArticle(html) {
     fetch(URL_POST, options)
         .then((res) => {
             if (res.ok) {
-                getAllArticles(html);
+                getAllArticles(interface_els_obj);
             } else {
                 throw new Error('Something went wrong');
             }
-
-            document.getElementById('inputPost_title').value = '';
-            document.getElementById('inputPost_text').value = '';
         })
         .catch((error) => {
-            console.log(error.message);
+            console.log(error);
         });
 }
 
-function editArticle(postId, html) {
+function editArticle(interface_els_obj, articleId, newTitle, newText) {
     let newPostEdit = {
-        id: postId,
+        id: articleId,
         changes: {
-            title: 'The truth about her is that...',
-            text: 'My new edited text',
+            title: newTitle,
+            text: newText,
         },
     };
 
@@ -66,7 +58,7 @@ function editArticle(postId, html) {
     fetch(URL_PUT, options)
         .then((res) => {
             if (res.ok) {
-                getAllArticles(html);
+                getAllArticles(interface_els_obj);
             } else {
                 throw new Error('Something went wrong');
             }

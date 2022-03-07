@@ -33,6 +33,7 @@ function formatDate(date) {
     }
     return result;
 }
+
 function setCounter(length) {
     let STRING_POST;
     if (length == 1) {
