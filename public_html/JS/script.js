@@ -30,6 +30,7 @@ function postNewArticle(interface_els_obj, title, text) {
     fetch(URL_POST, options)
         .then((res) => {
             if (res.ok) {
+                showSuccessAlert('alert_postSuccess');
                 getAllArticles(interface_els_obj);
             } else {
                 throw new Error('Something went wrong');
@@ -58,6 +59,7 @@ function editArticle(interface_els_obj, articleId, newTitle, newText) {
     fetch(URL_PUT, options)
         .then((res) => {
             if (res.ok) {
+                showSuccessAlert('alert_editSuccess');
                 getAllArticles(interface_els_obj);
             } else {
                 throw new Error('Something went wrong');
@@ -77,6 +79,7 @@ function deleteArticle(articleId, html) {
     fetch(URL_DELETE, options)
         .then((res) => {
             if (res.ok) {
+                showSuccessAlert('alert_deleteSuccess');
                 getAllArticles(html);
             } else {
                 throw new Error('Something went wrong');

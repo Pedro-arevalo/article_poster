@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const button_formEdit = getById('button_formEdit');
     const button_edit = getById('button_edit');
 
+    const modal_post = getById('modalForPosts');
+    const modal_edit = getById('modalForEdits');
     const inputTitle_post = getById('inputPost_title');
     const inputText_post = getById('inputPost_text');
     const inputTitle_edit = getById('inputEditedPost_title');
@@ -25,6 +27,10 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     button_formEdit.addEventListener('click', () => {
         savedId = rowId;
+
+        setTimeout(() => {
+            inputTitle_edit.focus();
+        }, 500);
     });
     window.addEventListener('click', (e) => {
         let clicked_area = e.target.parentNode.parentNode;
@@ -40,9 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (rowId == null) {
             console.log('Please select one article first.');
         } else {
-            setTimeout(() => {
-                showAlert('alert_deleteSuccess');
-            }, 300);
             deleteArticle(rowId, HTML_obj);
         }
     });
@@ -50,24 +53,23 @@ document.addEventListener('DOMContentLoaded', () => {
         if (savedId == null) {
             console.log('Please select one article first.');
         } else {
-            setTimeout(() => {
-                showAlert('alert_editSuccess');
-            }, 300);
             let input_newTitle = getById('inputEditedPost_title').value;
             let input_newText = getById('inputEditedPost_text').value;
             editArticle(HTML_obj, savedId, input_newTitle, input_newText);
         }
     });
     button_post.addEventListener('click', () => {
-        setTimeout(() => {
-            showAlert('alert_postSuccess');
-        }, 300);
-
         let title = inputTitle_post.value;
         let text = inputText_post.value;
         inputTitle_post.value = '';
         inputText_post.value = '';
         postNewArticle(HTML_obj, title, text);
+    });
+    modal_post.addEventListener('shown.bs.modal', () => {
+        inputTitle_post.focus();
+    });
+    modal_edit.addEventListener('shown.bs.modal', () => {
+        inputTitle_edit.focus();
     });
 
     inputTitle_post.value = '';
@@ -78,14 +80,16 @@ document.addEventListener('DOMContentLoaded', () => {
     getAllArticles(HTML_obj);
 });
 
-function showAlert(alert_id) {
-    const alert = getById(alert_id);
-    alert.classList.add('show');
-    alert.classList.remove('hidden');
+function showSuccessAlert(alert_id) {
     setTimeout(() => {
-        alert.classList.remove('show');
-        alert.classList.add('hidden');
-    }, 2000);
+        const alert = getById(alert_id);
+        alert.classList.add('show');
+        alert.classList.remove('hidden');
+        setTimeout(() => {
+            alert.classList.remove('show');
+            alert.classList.add('hidden');
+        }, 2000);
+    }, 300);
 }
 
 function edAndDel_events(action, html) {}
@@ -165,19 +169,33 @@ function setFinalDisplay(
             );
 
             arts.forEach((art) => {
+                let collapse_id = 'collapse_' + art.id;
                 tbody.appendChild(
-                    createTableRow(art, button_delete, button_formEdit)
+                    createTableRow(
+                        art,
+                        button_delete,
+                        button_formEdit,
+                        collapse_id
+                    )
+                );
+                tbody.appendChild(
+                    createAdditionalCollapseRow(art, collapse_id)
                 );
             });
             table.classList.remove('hiddenElements');
     }
 }
 
-function createTableRow(art, b_delete, b_edit) {
+function createTableRow(art, b_delete, b_edit, collapse_id) {
     let tr = createEl('tr');
     let td_title = createEl('td');
     let td_date = createEl('td');
-    tr.id = art.id;
+    tr.setAttribute('id', art.id);
+    tr.classList.add('header_tr');
+    tr.setAttribute('data-bs-toggle', 'collapse');
+    tr.setAttribute('data-bs-target', '#' + collapse_id);
+    tr.setAttribute('aria-expanded', 'false');
+    tr.setAttribute('aria-controls', collapse_id);
 
     td_title.innerText = art.title;
     td_date.innerText = formatDate(art.date);
@@ -201,3 +219,39 @@ function createTableRow(art, b_delete, b_edit) {
 
     return tr;
 }
+
+function createAdditionalCollapseRow(art, id) {
+    let tr = createEl('tr');
+    let td = createEl('td');
+    let div = createEl('div');
+    let inner_div = createEl('div');
+
+    td.setAttribute('colspan', 2);
+    td.classList.add('noPadding');
+    td.style.padding = 0;
+
+    div.setAttribute('id', id);
+    div.classList.add('collapse');
+
+    inner_div.classList.add('article_content');
+    inner_div.innerText = art.text;
+
+    div.appendChild(inner_div);
+    td.appendChild(div);
+    tr.appendChild(td);
+
+    return tr;
+}
+
+// <tr data-bs-toggle="collapse" data-bs-target="#collapse_me" aria-expanded="false" aria-controls="collapseExample">
+//     <td style="text-align: center;">Click Me</td>
+// </tr>
+// <tr class="additional_row">
+//     <td>
+//         <div class="collapse" id="collapse_me">
+//             <div class="coll_content">
+//                 Hello world
+//             </div>
+//         </div>
+//     </td>
+// </tr>

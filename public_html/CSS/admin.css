@@ -2,12 +2,17 @@
     display: none;
 }
 
+.noPadding {
+    padding: 0;
+}
+
 .my-alerts {
     display: block;
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
+    position: fixed;
+    top: 20px;
+    /* left: 50%;
+    transform: translateX(-50%); */
+    right: 20px;
     padding-left: 3em;
     padding-right: 3em;
     text-align: center;
@@ -31,16 +36,20 @@
     background-color: #cecece;
 }
 
-td {
+#table_allPosts td {
     line-height: 2;
 }
 
-td:first-of-type {
+.header_tr td:first-of-type {
     font-weight: bold;
 }
 
-td:last-of-type {
+.header_tr td:last-of-type {
     text-align: right;
+}
+
+.article_content {
+    padding: 1em;
 }
 
 /* MODAL / FORM*/
