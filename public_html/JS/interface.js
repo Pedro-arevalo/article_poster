@@ -1,5 +1,7 @@
 const SELECTED = 'row_selected';
 let rowId = null;
+let rowTitle = '';
+let rowText = '';
 let savedId = null;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -27,10 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     button_formEdit.addEventListener('click', () => {
         savedId = rowId;
-
-        setTimeout(() => {
-            inputTitle_edit.focus();
-        }, 500);
     });
     window.addEventListener('click', (e) => {
         let clicked_area = e.target.parentNode.parentNode;
@@ -70,6 +68,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     modal_edit.addEventListener('shown.bs.modal', () => {
         inputTitle_edit.focus();
+        inputTitle_edit.value = rowTitle;
+        inputText_edit.value = rowText;
     });
 
     inputTitle_post.value = '';
@@ -91,8 +91,6 @@ function showSuccessAlert(alert_id) {
         }, 2000);
     }, 300);
 }
-
-function edAndDel_events(action, html) {}
 
 //contains all the other functions interface related
 function showAllArticles(arts, myHtml) {
@@ -215,6 +213,8 @@ function createTableRow(art, b_delete, b_edit, collapse_id) {
         }
         clicked_row.classList.add(SELECTED);
         rowId = clicked_row.id;
+        rowTitle = art.title;
+        rowText = art.text;
     });
 
     return tr;
@@ -242,16 +242,3 @@ function createAdditionalCollapseRow(art, id) {
 
     return tr;
 }
-
-// <tr data-bs-toggle="collapse" data-bs-target="#collapse_me" aria-expanded="false" aria-controls="collapseExample">
-//     <td style="text-align: center;">Click Me</td>
-// </tr>
-// <tr class="additional_row">
-//     <td>
-//         <div class="collapse" id="collapse_me">
-//             <div class="coll_content">
-//                 Hello world
-//             </div>
-//         </div>
-//     </td>
-// </tr>
