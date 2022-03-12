@@ -20,8 +20,13 @@ function getAllArticles(html) {
         });
 }
 
-function postNewArticle(interface_els_obj, title, text) {
-    let newPost = { title, text };
+function postNewArticle(html) {
+    let titleInput = document.getElementById('inputPost_title').value;
+    let textInput = document.getElementById('inputPost_text').value;
+    let newPost = {
+        title: titleInput,
+        text: textInput,
+    };
     let options = {
         method: 'POST',
         headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -30,23 +35,30 @@ function postNewArticle(interface_els_obj, title, text) {
     fetch(URL_POST, options)
         .then((res) => {
             if (res.ok) {
+<<<<<<< HEAD
                 showSuccessAlert('alert_postSuccess');
                 getAllArticles(interface_els_obj);
+=======
+                getAllArticles(html);
+>>>>>>> parent of c25cd97 (improved the style in the forms; added bootstrap alerts for ui/ux purposes)
             } else {
                 throw new Error('Something went wrong');
             }
+
+            document.getElementById('inputPost_title').value = '';
+            document.getElementById('inputPost_text').value = '';
         })
         .catch((error) => {
-            console.log(error);
+            console.log(error.message);
         });
 }
 
-function editArticle(interface_els_obj, articleId, newTitle, newText) {
+function editArticle(postId, html) {
     let newPostEdit = {
-        id: articleId,
+        id: postId,
         changes: {
-            title: newTitle,
-            text: newText,
+            title: 'The truth about her is that...',
+            text: 'My new edited text',
         },
     };
 
@@ -59,8 +71,12 @@ function editArticle(interface_els_obj, articleId, newTitle, newText) {
     fetch(URL_PUT, options)
         .then((res) => {
             if (res.ok) {
+<<<<<<< HEAD
                 showSuccessAlert('alert_editSuccess');
                 getAllArticles(interface_els_obj);
+=======
+                getAllArticles(html);
+>>>>>>> parent of c25cd97 (improved the style in the forms; added bootstrap alerts for ui/ux purposes)
             } else {
                 throw new Error('Something went wrong');
             }

@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const box_table_body = getById('tableBody_allPosts');
     const button_post = getById('button_post');
     const button_delete = getById('button_delete');
-    const button_formEdit = getById('button_formEdit');
     const button_edit = getById('button_edit');
 
     const modal_post = getById('modalForPosts');
@@ -25,20 +24,21 @@ document.addEventListener('DOMContentLoaded', () => {
         b_table: box_table,
         b_tableBody: box_table_body,
         button_delete,
-        button_formEdit,
+        button_edit,
     };
-    button_formEdit.addEventListener('click', () => {
-        savedId = rowId;
-    });
+
     window.addEventListener('click', (e) => {
         let clicked_area = e.target.parentNode.parentNode;
         let selected_row = document.querySelector('.' + SELECTED);
         if (clicked_area != box_table_body && selected_row) {
             selected_row.classList.remove(SELECTED);
             button_delete.classList.add('disabled');
-            button_formEdit.classList.add('disabled');
+            button_edit.classList.add('disabled');
             rowId = null;
         }
+    });
+    button_post.addEventListener('click', () => {
+        postNewArticle(HTML_obj);
     });
     button_delete.addEventListener('click', () => {
         if (rowId == null) {
@@ -71,11 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
         inputTitle_edit.value = rowTitle;
         inputText_edit.value = rowText;
     });
-
-    inputTitle_post.value = '';
-    inputText_post.value = '';
-    inputTitle_edit.value = '';
-    inputText_edit.value = '';
 
     getAllArticles(HTML_obj);
 });
@@ -124,7 +119,7 @@ function showAllArticles(arts, myHtml) {
         arts,
         noPosts_title,
         myHtml.button_delete,
-        myHtml.button_formEdit
+        myHtml.button_edit
     );
 }
 
@@ -135,7 +130,7 @@ function setFinalDisplay(
     tbody,
     arts,
     title,
-    button_formEdit,
+    button_edit,
     button_delete
 ) {
     switch (cases) {
@@ -165,13 +160,10 @@ function setFinalDisplay(
                 'align-items-center',
                 'min-height'
             );
-            tbody.classList.add('accordion');
 
             arts.forEach((art) => {
-                let collapse_id = 'collapse_' + art.id;
-
                 tbody.appendChild(
-                    createRows(art, button_delete, button_edit, collapse_id)
+                    createTableRow(art, button_delete, button_edit)
                 );
             });
 
@@ -180,28 +172,11 @@ function setFinalDisplay(
     }
 }
 
-function createRows(art, b_delete, b_edit, collapse_id) {
-    let accordion_item = createEl('div');
-    accordion_item.classList.add('accordion-item');
-
-    accordion_item.appendChild(
-        createTableRow(art, b_delete, b_edit, collapse_id)
-    );
-    accordion_item.appendChild(createAdditionalCollapseRow(art, collapse_id));
-
-    return accordion_item;
-}
-
-function createTableRow(art, b_delete, b_edit, collapse_id) {
+function createTableRow(art, b_delete, b_edit) {
     let tr = createEl('tr');
     let td_title = createEl('td');
     let td_date = createEl('td');
-    tr.setAttribute('id', art.id);
-    tr.classList.add('header_tr', 'accordion-header');
-    tr.setAttribute('data-bs-toggle', 'collapse');
-    tr.setAttribute('data-bs-target', '#' + collapse_id);
-    tr.setAttribute('aria-expanded', 'false');
-    tr.setAttribute('aria-controls', collapse_id);
+    tr.id = art.id;
 
     td_title.innerText = art.title;
     td_date.innerText = formatDate(art.date);
@@ -224,28 +199,6 @@ function createTableRow(art, b_delete, b_edit, collapse_id) {
         rowTitle = art.title;
         rowText = art.text;
     });
-
-    return tr;
-}
-
-function createAdditionalCollapseRow(art, id) {
-    let tr = createEl('tr');
-    let td = createEl('td');
-    let div = createEl('div');
-    let inner_div = createEl('div');
-
-    td.setAttribute('colspan', 2);
-    td.style.padding = 0;
-
-    div.setAttribute('id', id);
-    div.classList.add('accordion-collapse', 'collapse');
-    div.setAttribute('data-bs-parent', '#tableBody_allPosts');
-
-    inner_div.innerText = art.text;
-
-    div.appendChild(inner_div);
-    td.appendChild(div);
-    tr.appendChild(td);
 
     return tr;
 }
