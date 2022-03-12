@@ -165,23 +165,31 @@ function setFinalDisplay(
                 'align-items-center',
                 'min-height'
             );
+            tbody.classList.add('accordion');
 
             arts.forEach((art) => {
                 let collapse_id = 'collapse_' + art.id;
+
                 tbody.appendChild(
-                    createTableRow(
-                        art,
-                        button_delete,
-                        button_formEdit,
-                        collapse_id
-                    )
-                );
-                tbody.appendChild(
-                    createAdditionalCollapseRow(art, collapse_id)
+                    createRows(art, button_delete, button_edit, collapse_id)
                 );
             });
+
             table.classList.remove('hiddenElements');
+            console.log(table.outerHTML);
     }
+}
+
+function createRows(art, b_delete, b_edit, collapse_id) {
+    let accordion_item = createEl('div');
+    accordion_item.classList.add('accordion-item');
+
+    accordion_item.appendChild(
+        createTableRow(art, b_delete, b_edit, collapse_id)
+    );
+    accordion_item.appendChild(createAdditionalCollapseRow(art, collapse_id));
+
+    return accordion_item;
 }
 
 function createTableRow(art, b_delete, b_edit, collapse_id) {
@@ -189,7 +197,7 @@ function createTableRow(art, b_delete, b_edit, collapse_id) {
     let td_title = createEl('td');
     let td_date = createEl('td');
     tr.setAttribute('id', art.id);
-    tr.classList.add('header_tr');
+    tr.classList.add('header_tr', 'accordion-header');
     tr.setAttribute('data-bs-toggle', 'collapse');
     tr.setAttribute('data-bs-target', '#' + collapse_id);
     tr.setAttribute('aria-expanded', 'false');
@@ -227,13 +235,12 @@ function createAdditionalCollapseRow(art, id) {
     let inner_div = createEl('div');
 
     td.setAttribute('colspan', 2);
-    td.classList.add('noPadding');
     td.style.padding = 0;
 
     div.setAttribute('id', id);
-    div.classList.add('collapse');
+    div.classList.add('accordion-collapse', 'collapse');
+    div.setAttribute('data-bs-parent', '#tableBody_allPosts');
 
-    inner_div.classList.add('article_content');
     inner_div.innerText = art.text;
 
     div.appendChild(inner_div);
