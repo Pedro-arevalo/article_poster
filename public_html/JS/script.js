@@ -3,7 +3,7 @@ const URL_GET = 'http://localhost:5000/api/all';
 const URL_PUT = 'http://localhost:5000/api/update';
 const URL_DELETE = 'http://localhost:5000/api/del';
 
-function getAllArticles(html) {
+function getAllArticles() {
     fetch(URL_GET)
         .then((res) => {
             if (res.ok) {
@@ -13,14 +13,14 @@ function getAllArticles(html) {
             }
         })
         .then((articles) => {
-            showAllArticles(articles, html);
+            showAllArticles(articles);
         })
         .catch((error) => {
             console.log(error);
         });
 }
 
-function postNewArticle(interface_els_obj, title, text) {
+function postNewArticle(title, text) {
     let newPost = { title, text };
     let options = {
         method: 'POST',
@@ -29,31 +29,27 @@ function postNewArticle(interface_els_obj, title, text) {
     };
     fetch(URL_POST, options)
         .then((res) => {
-            let alert_div = interface_els_obj.alert_div;
-            let alert_message = interface_els_obj.alert_message;
-            let alert_icon = interface_els_obj.alert_icon;
             if (res.ok) {
-                showRespectiveAlert(
-                    'post success',
-                    alert_div,
-                    alert_message,
-                    alert_icon
-                );
-                getAllArticles(interface_els_obj);
+                //displays an alert for when the request succeded
+                showRespectiveAlert('post success');
+                /*given there's a change in the server data, the displayed
+                table would be outdated, that's why this function has to
+                be called in order to asynchoronouslly call the current
+                state of the server data in order to allways mantain the
+                frontend updated*/
+                getAllArticles();
             } else {
-                showRespectiveAlert('post fail', alert_div, alert_message);
+                //displays an alert for when the request failed
+                showRespectiveAlert('post fail');
                 throw new Error('Something went wrong');
             }
-
-            document.getElementById('inputPost_title').value = '';
-            document.getElementById('inputPost_text').value = '';
         })
         .catch((error) => {
-            console.log(error.message);
+            console.log(error);
         });
 }
 
-function editArticle(interface_els_obj, postId, newTitle, newText) {
+function editArticle(postId, newTitle, newText) {
     let newPostEdit = {
         id: postId,
         changes: {
@@ -70,19 +66,19 @@ function editArticle(interface_els_obj, postId, newTitle, newText) {
 
     fetch(URL_PUT, options)
         .then((res) => {
-            let alert_div = interface_els_obj.alert_div;
-            let alert_message = interface_els_obj.alert_message;
-            let alert_icon = interface_els_obj.alert_icon;
             if (res.ok) {
-                showRespectiveAlert(
-                    'edit success',
-                    alert_div,
-                    alert_message,
-                    alert_icon
-                );
-                getAllArticles(interface_els_obj);
+                //displays an alert for when the request succeded
+                showRespectiveAlert('edit success');
+
+                /*given there's a change in the server data, the displayed
+                table would be outdated, that's why this function has to
+                be called in order to asynchoronouslly call the current
+                state of the server data in order to allways mantain the
+                frontend updated*/
+                getAllArticles();
             } else {
-                showRespectiveAlert('edit fail', alert_div, alert_message);
+                //displays an alert for when the request failed
+                showRespectiveAlert('edit fail');
                 throw new Error('Something went wrong');
             }
         })
@@ -91,7 +87,7 @@ function editArticle(interface_els_obj, postId, newTitle, newText) {
         });
 }
 
-function deleteArticle(articleId, interface_els_obj) {
+function deleteArticle(articleId) {
     let options = {
         method: 'DELETE',
         headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -99,19 +95,18 @@ function deleteArticle(articleId, interface_els_obj) {
     };
     fetch(URL_DELETE, options)
         .then((res) => {
-            let alert_div = interface_els_obj.alert_div;
-            let alert_message = interface_els_obj.alert_message;
-            let alert_icon = interface_els_obj.alert_icon;
             if (res.ok) {
-                showRespectiveAlert(
-                    'delete success',
-                    alert_div,
-                    alert_message,
-                    alert_icon
-                );
-                getAllArticles(interface_els_obj);
+                //displays an alert for when the request succeded
+                showRespectiveAlert('delete success');
+                /*given there's a change in the server data, the displayed
+                table would be outdated, that's why this function has to
+                be called in order to asynchoronouslly call the current
+                state of the server data in order to allways mantain the
+                frontend updated*/
+                getAllArticles();
             } else {
-                showRespectiveAlert('delete fail', alert_div, alert_message);
+                //displays an alert for when the request failed
+                showRespectiveAlert('delete fail');
                 throw new Error('Something went wrong');
             }
         })
