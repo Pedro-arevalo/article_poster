@@ -20,13 +20,8 @@ function getAllArticles(html) {
         });
 }
 
-function postNewArticle(html) {
-    let titleInput = document.getElementById('inputPost_title').value;
-    let textInput = document.getElementById('inputPost_text').value;
-    let newPost = {
-        title: titleInput,
-        text: textInput,
-    };
+function postNewArticle(interface_els_obj, title, text) {
+    let newPost = { title, text };
     let options = {
         method: 'POST',
         headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -34,14 +29,19 @@ function postNewArticle(html) {
     };
     fetch(URL_POST, options)
         .then((res) => {
+            let alert_div = interface_els_obj.alert_div;
+            let alert_message = interface_els_obj.alert_message;
+            let alert_icon = interface_els_obj.alert_icon;
             if (res.ok) {
-<<<<<<< HEAD
-                showSuccessAlert('alert_postSuccess');
+                showRespectiveAlert(
+                    'post success',
+                    alert_div,
+                    alert_message,
+                    alert_icon
+                );
                 getAllArticles(interface_els_obj);
-=======
-                getAllArticles(html);
->>>>>>> parent of c25cd97 (improved the style in the forms; added bootstrap alerts for ui/ux purposes)
             } else {
+                showRespectiveAlert('post fail', alert_div, alert_message);
                 throw new Error('Something went wrong');
             }
 
@@ -53,12 +53,12 @@ function postNewArticle(html) {
         });
 }
 
-function editArticle(postId, html) {
+function editArticle(interface_els_obj, postId, newTitle, newText) {
     let newPostEdit = {
         id: postId,
         changes: {
-            title: 'The truth about her is that...',
-            text: 'My new edited text',
+            title: newTitle,
+            text: newText,
         },
     };
 
@@ -70,23 +70,28 @@ function editArticle(postId, html) {
 
     fetch(URL_PUT, options)
         .then((res) => {
+            let alert_div = interface_els_obj.alert_div;
+            let alert_message = interface_els_obj.alert_message;
+            let alert_icon = interface_els_obj.alert_icon;
             if (res.ok) {
-<<<<<<< HEAD
-                showSuccessAlert('alert_editSuccess');
+                showRespectiveAlert(
+                    'edit success',
+                    alert_div,
+                    alert_message,
+                    alert_icon
+                );
                 getAllArticles(interface_els_obj);
-=======
-                getAllArticles(html);
->>>>>>> parent of c25cd97 (improved the style in the forms; added bootstrap alerts for ui/ux purposes)
             } else {
+                showRespectiveAlert('edit fail', alert_div, alert_message);
                 throw new Error('Something went wrong');
             }
         })
         .catch((error) => {
-            console.log(error.message);
+            console.log(error);
         });
 }
 
-function deleteArticle(articleId, html) {
+function deleteArticle(articleId, interface_els_obj) {
     let options = {
         method: 'DELETE',
         headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -94,10 +99,19 @@ function deleteArticle(articleId, html) {
     };
     fetch(URL_DELETE, options)
         .then((res) => {
+            let alert_div = interface_els_obj.alert_div;
+            let alert_message = interface_els_obj.alert_message;
+            let alert_icon = interface_els_obj.alert_icon;
             if (res.ok) {
-                showSuccessAlert('alert_deleteSuccess');
-                getAllArticles(html);
+                showRespectiveAlert(
+                    'delete success',
+                    alert_div,
+                    alert_message,
+                    alert_icon
+                );
+                getAllArticles(interface_els_obj);
             } else {
+                showRespectiveAlert('delete fail', alert_div, alert_message);
                 throw new Error('Something went wrong');
             }
         })
