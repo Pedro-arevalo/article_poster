@@ -37,7 +37,7 @@
 td:first-of-type {
     font-weight: bold;
 }
-
+th:last-of-type,
 td:last-of-type {
     text-align: right;
 }
@@ -55,6 +55,36 @@ td {
 #modalForEdits h3 {
     font-weight: 400;
 }
+
+.modal-body:last-of-type {
+    min-height: 200px;
+}
+
+.header_buttons {
+    padding: 8px;
+    color: gray;
+    margin-bottom: 2px;
+}
+.header_buttons:last-of-type {
+    margin-bottom: 0;
+    margin-right: 0;
+    margin-top: 0;
+}
+.header_buttons + .header_buttons {
+    margin-left: 0.5em;
+}
+.header_buttons:hover {
+    color: initial;
+}
+
+#articleTitle {
+    margin-bottom: 0;
+}
+
+#articleText {
+    font-size: 1.2rem;
+}
+
 .myModal-content {
     padding-left: 1em;
     padding-right: 1em;

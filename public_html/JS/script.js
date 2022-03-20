@@ -50,6 +50,9 @@ function postNewArticle(title, text) {
 }
 
 function editArticle(postId, newTitle, newText) {
+    console.log(postId);
+    console.log(newTitle);
+    console.log(newText);
     let newPostEdit = {
         id: postId,
         changes: {

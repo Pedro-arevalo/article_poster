@@ -3,24 +3,37 @@ let rowId = null;
 let savedId = null;
 let rowTitle = '';
 let rowText = '';
+let show_content_after_cancel_delete = false;
 
 document.addEventListener('DOMContentLoaded', () => {
-    // TABLE AND BUTTONS ELEMENTS
-    const box = getById('box_lastPosts-body');
-    const box_table = getById('table_allPosts');
-
-    const button_delete = getById('button_delete');
-    const button_form_edit = getById('button_formEdit');
-    const button_edit = getById('button_edit');
-    const button_post = getById('button_post');
+    const button_pre_delete = getById('button_pre_delete'); //button that opens a modal for delete confirmation
+    const button_cancel_delete = getById('button_cancel_delete'); //button that cancels the article delete
+    const button_delete = getById('button_delete'); //button that sends the request to delete the article
+    const button_form_edit = getById('button_formEdit'); //button that opens a form to set the changes in the article
+    const button_edit = getById('button_edit'); //button that sends the request to edit the article
+    const button_post = getById('button_post'); //button that sends the request to post the article
 
     // MODAL ELEMENTS
+    //  - ARTICLE CONTENT MODAL
+    const modal_art_content = getById('modal_articleContent');
+    const modal_button_pre_delete = getById('modal_button_pre_delete');
+
+    //  - POST MODAL
     const modal_post = getById('modalForPosts');
     const inputTitle_post = getById('inputPost_title');
     const inputText_post = getById('inputPost_text');
+
+    //  - EDIT MODAL
     const modal_edit = getById('modalForEdits');
     const inputTitle_edit = getById('inputEditedPost_title');
     const inputText_edit = getById('inputEditedPost_text');
+
+    //  - DELETE MODAL
+    const modal_delete = getById('modalForDeletes');
+    const modal_delete_articleTitle = getById('modal_delete_articleTitle');
+
+    inputTitle_post.value = '';
+    inputText_post.value = '';
 
     window.addEventListener('click', (e) => {
         const box_table_body = getById('tableBody_allPosts');
@@ -28,24 +41,45 @@ document.addEventListener('DOMContentLoaded', () => {
         let selected_row = document.querySelector('.' + SELECTED);
         if (clicked_area != box_table_body && selected_row) {
             selected_row.classList.remove(SELECTED);
-            button_delete.classList.add('disabled');
+            button_pre_delete.classList.add('disabled');
             button_form_edit.classList.add('disabled');
             rowId = null;
         }
     });
 
-    button_delete.addEventListener('click', () => {
-        if (rowId == null) {
-            console.log('Please select one article first.');
-        } else {
-            deleteArticle(rowId);
-        }
-    });
-
-    button_form_edit.addEventListener('click', () => {
+    button_pre_delete.addEventListener('click', () => {
         savedId = rowId;
     });
 
+    modal_button_pre_delete.addEventListener('click', () => {
+        show_content_after_cancel_delete = true;
+    });
+
+    modal_delete.addEventListener('show.bs.modal', () => {
+        modal_delete_articleTitle.innerText = rowTitle;
+    });
+
+    button_cancel_delete.addEventListener('click', () => {
+        if (show_content_after_cancel_delete === true) {
+            let modal_content = new bootstrap.Modal(modal_art_content, {
+                keyboard: false,
+            });
+            modal_content.show();
+
+            show_content_after_cancel_delete = false;
+        }
+    });
+
+    button_delete.addEventListener('click', () => {
+        if (savedId == null) {
+            console.log('Please select one article first.');
+        } else {
+            deleteArticle(savedId);
+        }
+    });
+    button_form_edit.addEventListener('click', () => {
+        savedId = rowId;
+    });
     button_edit.addEventListener('click', () => {
         if (savedId == null) {
             console.log('Please select one article first.');
@@ -67,10 +101,17 @@ document.addEventListener('DOMContentLoaded', () => {
     modal_post.addEventListener('shown.bs.modal', () => {
         inputTitle_post.focus();
     });
-    modal_edit.addEventListener('shown.bs.modal', () => {
-        inputTitle_edit.focus();
+
+    modal_post.addEventListener('hidden.bs.modal', () => {
+        inputTitle_post.value = '';
+        inputText_post.value = '';
+    });
+    modal_edit.addEventListener('show.bs.modal', () => {
         inputTitle_edit.value = rowTitle;
         inputText_edit.value = rowText;
+    });
+    modal_edit.addEventListener('shown.bs.modal', () => {
+        inputTitle_edit.focus();
     });
 
     getAllArticles();
@@ -145,6 +186,9 @@ function setFinalDisplay(cases, arts) {
 }
 
 function createTableRow(art) {
+    let pre_delete_button = getById('button_pre_delete');
+    let form_edit_button = getById('button_formEdit');
+
     let tr = createEl('tr');
     let td_title = createEl('td');
     let td_date = createEl('td');
@@ -157,13 +201,11 @@ function createTableRow(art) {
     tr.appendChild(td_date);
 
     tr.addEventListener('click', (event) => {
-        let delete_button = getById('button_delete');
-        let edit_button = getById('button_formEdit');
         let clicked_row = event.target.parentNode;
         let prev_row_selected = document.querySelector('.' + SELECTED);
 
-        delete_button.classList.remove('disabled');
-        edit_button.classList.remove('disabled');
+        pre_delete_button.classList.remove('disabled');
+        form_edit_button.classList.remove('disabled');
 
         if (prev_row_selected) {
             prev_row_selected.classList.remove(SELECTED);
@@ -172,6 +214,26 @@ function createTableRow(art) {
         rowId = clicked_row.id;
         rowTitle = art.title;
         rowText = art.text;
+
+        console.log(rowId);
+    });
+    tr.addEventListener('dblclick', () => {
+        pre_delete_button.classList.add('disabled');
+        form_edit_button.classList.add('disabled');
+        savedId = rowId;
+        let article_content = new bootstrap.Modal(
+            getById('modal_articleContent'),
+            {
+                keyboard: false,
+            }
+        );
+        let modal_title = getById('articleTitle');
+        let modal_text = getById('articleText');
+
+        modal_title.innerText = art.title;
+        modal_text.innerText = art.text;
+
+        article_content.show();
     });
 
     return tr;
